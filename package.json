@@ -1,0 +1,21 @@
+{
+  "name": "0205-chall",
+  "version": "1.0.0",
+  "description": "",
+  "main": "convert_format.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "build": "npm test && tsc",
+    "try": "tsc && node ./src/convert_format.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
