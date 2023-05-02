@@ -16,6 +16,7 @@ export class TimeConverter {
       obj.minutes * 60 +
       obj.hours * 60 * 60 +
       obj.days * 24 * 60 * 60 +
+      obj.weeks * 7 * 24 * 60 * 60 +
       obj.months * 30 * 24 * 60 * 60 +
       obj.years * 12 * 30 * 24 * 60 * 60
     )
