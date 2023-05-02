@@ -6,11 +6,95 @@ export function isDigit (character: string): boolean {
   }
 }
 
+export function parseTimeComponent(str: string) {
+}
+
+
+const dayParams = ['Y', 'M', 'D'];
+const dayMap = new Map();
+dayMap.set('Y', 0);
+dayMap.set('M', 0);
+dayMap.set('D', 0);
+const timeMap = new Map();
+timeMap.set('H', 0);
+timeMap.set('M', 0);
+timeMap.set('S', 0);
+
+export function parseDayComponent(str: string) {
+  console.log(str);
+  var splits;
+  for(const key of dayMap.keys()) {
+    if(str.includes(key)) {
+      splits = str.split(key);
+
+      str = splits[1];
+      dayMap.set(key, splits[0]);
+    }
+    // if false: param is not set
+  }
+
+  console.log(dayMap.entries());
+  return 1;
+}
+export function parseDayComponent1(str: string) {
+  console.log(str);
+  str = str.slice(1, str.length); // remove P
+
+  // 3Y0M14D
+  // 3Y 0M 14D
+
+  var splits = str.split('Y');
+  const years = splits[0];
+
+  splits = splits[1].split('M');
+  const months = splits[0];
+
+  splits = splits[1].split('D');
+  const days = splits[0];
+
+  console.log(years, months, days);
+  return 1;
+}
+
+// P3Y0M14DT12H30M55S
+// P3Y0M14D [T] 12H30M55S
+// P3Y0M14D     12H30M55S
+export function parseDuration(str: string): number {
+  if(!str || str[0] != 'P' || str.length < 3) {
+    return -1;
+  }
+
+  str = str.substring(1); // remove P
+
+  var seconds: number = 0;
+
+  const durationDesignator = 'P';
+  const timeDesignator = 'T';
+  const splits = str.split('T');
+
+  if(splits.length == 2) {
+    const day = parseDayComponent(splits[0]);
+    const time = parseTimeComponent(splits[1]);
+  }
+  else if(splits.length == 1) { // no Time component
+    parseTimeComponent("");
+  }
+  else {
+    return -1;
+  }
+
+
+  //console.log(years, months, days, hours, minutes, seconds);
+
+
+  return seconds;
+}
+
   
 
-// P[n]Y[n]M[n]DT[n]H[n]M[n]S  or  P[n]W
+// P[n]Y[n]M[n]D T[n]H[n]M[n]S  or  P[n]W
 // For example ‘PT1M1.2S’ converts to 61,2 seconds
-export function parseDuration (durationStr: string): number {
+export function parseDuration1 (durationStr: string): number {
   // Check initial validness
   // must have at least one element represented after P, eg "P0D"
   if (!durationStr || durationStr[0] !== 'P' || durationStr.length < 3) {
@@ -101,6 +185,7 @@ export function parseDuration (durationStr: string): number {
 }
 
 //parseDuration("PT1M1.2S");
-parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
+parseDuration('P3Y14DT12H30M55S');
+//parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
 // three years, six months, four days, twelve hours, thirty minutes, and five seconds
 //parseDuration("P3Y6M0DT12H30M5S");
