@@ -1,10 +1,10 @@
 import { DateParser } from "./dateParser";
 import { TimeConverter } from "./timeConverter";
 
-/**
- * Model component representing an ISO_8601 Duration
- */
 
+/**
+ * Designators are characters used to identify properties inside a ISO_8601 Duration representation
+ */
 enum DESIGNATORS {
     PERIOD = 'P',
     TIME = 'T',
@@ -17,15 +17,22 @@ enum DESIGNATORS {
     SECOND = 'S',
 }
 
+/**
+ * Error messages for ISO_8601 Duration parsing
+ */
 enum ERRORS {
     INVALID_FORMAT = 'Invalid format for ISO_8601 Duration',
     BANNED_PARAM = 'Blacklisted parameter detected',
 }
 
-// ISO_8601 DURATION represenation
+/**
+ * Model component representing an ISO_8601 Duration
+ */
 export class Duration {
   public static readonly DESIGNATORS = DESIGNATORS;
   public static readonly ERRORS = ERRORS;
+
+  public to: TimeConverter;
 
   public readonly seconds
   public readonly minutes
@@ -43,17 +50,26 @@ export class Duration {
     this.hours = hours
     this.minutes = minutes
     this.seconds = seconds
+
+    this.to = new TimeConverter(this);
   }
 
+  /**
+   * Initialize a Duration object by cloning another Duration object
+   * @param obj object to clone from
+   * @returns new Instance of {@link Duration} cloned from the given object
+   */
   public static copy(obj: Duration): Duration {
     return new Duration(obj.years, obj.months, obj.weeks, obj.days, obj.hours, obj.minutes, obj.seconds);
   }
 
+  /**
+   * Initialize a Duration object by parsing a ISO_8601 string
+   * @param str ISO_8601 string to parse
+   * @param debug whether to print the internal state of attribute maps on creation
+   * @returns new instance of {@link Duration} built from the parsed string
+   */
   public static from(str: string, debug: boolean = false): Duration {
     return new DateParser(debug).build(str);
-  }
-
-  public toSeconds(monthsBanned: boolean = true): number {
-    return TimeConverter.toSeconds(this, monthsBanned);
   }
 }
