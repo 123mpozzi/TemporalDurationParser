@@ -1,6 +1,7 @@
 "use strict";
+// TODO: rename file? also in .json files!
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseDuration1 = exports.parseDuration = exports.parseDayComponent1 = exports.parseDayComponent = exports.parseTimeComponent = exports.isDigit = void 0;
+exports.parseDuration = exports.getTotalSeconds = exports.parseTimeComponent = exports.parseDayComponent = exports.isDigit = void 0;
 function isDigit(character) {
     if (character >= '0' && character <= '9') {
         return true;
@@ -10,151 +11,103 @@ function isDigit(character) {
     }
 }
 exports.isDigit = isDigit;
+// TODO: global const bad practice? (clutter env, security in browser, .., make an object?)
+const PERIOD_DESIGNATOR = 'P';
+const TIME_DESIGNATOR = 'T';
+const YEAR_DESIGNATOR = 'Y';
+const MONTH_DESIGNATOR = 'M';
+const DAY_DESIGNATOR = 'D';
+const HOUR_DESIGNATOR = 'H';
+const MINUTE_DESIGNATOR = 'M';
+const SECOND_DESIGNATOR = 'S';
+// map of day component
+const dayMap = new Map();
+dayMap.set(YEAR_DESIGNATOR, 0);
+dayMap.set(MONTH_DESIGNATOR, 0);
+dayMap.set(DAY_DESIGNATOR, 0);
+// map of time component
+const timeMap = new Map();
+timeMap.set(HOUR_DESIGNATOR, 0);
+timeMap.set(MINUTE_DESIGNATOR, 0);
+timeMap.set(SECOND_DESIGNATOR, 0);
+function parseDayComponent(str) {
+    return parseComponent(dayMap, str);
+}
+exports.parseDayComponent = parseDayComponent;
 function parseTimeComponent(str) {
+    return parseComponent(timeMap, str);
 }
 exports.parseTimeComponent = parseTimeComponent;
-const dayParams = ['Y', 'M', 'D'];
-const dayMap = new Map();
-dayMap.set('Y', 0);
-dayMap.set('M', 0);
-dayMap.set('D', 0);
-const timeMap = new Map();
-timeMap.set('H', 0);
-timeMap.set('M', 0);
-timeMap.set('S', 0);
-function parseDayComponent(str) {
+function getTotalSeconds(dayMap, timeMap) {
+    const seconds = timeMap.get(SECOND_DESIGNATOR) || 0;
+    const minutes = timeMap.get(MINUTE_DESIGNATOR) || 0;
+    const hours = timeMap.get(HOUR_DESIGNATOR) || 0;
+    const days = dayMap.get(DAY_DESIGNATOR) || 0;
+    const months = dayMap.get(MONTH_DESIGNATOR) || 0;
+    const years = dayMap.get(YEAR_DESIGNATOR) || 0;
+    // TODO: months and years are variable!!
+    return (seconds +
+        minutes * 60 +
+        hours * 60 * 60 +
+        days * 24 * 60 * 60 +
+        months * 30 * 24 * 60 * 60 +
+        years * 12 * 30 * 24 * 60 * 60);
+}
+exports.getTotalSeconds = getTotalSeconds;
+// TODO: P0.5Y
+// TODO:  "PT36H" could be used as well as "P1DT12H"
+function parseComponent(map, str) {
     console.log(str);
     var splits;
-    for (const key of dayMap.keys()) {
+    for (const key of map.keys()) {
+        // if param is present
         if (str.includes(key)) {
             splits = str.split(key);
             str = splits[1];
-            dayMap.set(key, splits[0]);
+            map.set(key, parseInt(splits[0])); // TODO: parseInt checks?
         }
-        // if false: param is not set
     }
-    console.log(dayMap.entries());
-    return 1;
+    console.log(map.entries());
+    return map;
 }
-exports.parseDayComponent = parseDayComponent;
-function parseDayComponent1(str) {
-    console.log(str);
-    str = str.slice(1, str.length); // remove P
-    // 3Y0M14D
-    // 3Y 0M 14D
-    var splits = str.split('Y');
-    const years = splits[0];
-    splits = splits[1].split('M');
-    const months = splits[0];
-    splits = splits[1].split('D');
-    const days = splits[0];
-    console.log(years, months, days);
-    return 1;
-}
-exports.parseDayComponent1 = parseDayComponent1;
 // P3Y0M14DT12H30M55S
 // P3Y0M14D [T] 12H30M55S
 // P3Y0M14D     12H30M55S
+// TODO: pretty docs (also returns types, see typescript)
+// Parse ISO_8601 Durations
+// https://en.wikipedia.org/wiki/ISO_8601#Durations
 function parseDuration(str) {
-    if (!str || str[0] != 'P' || str.length < 3) {
+    // P signals the start of the duration representation
+    // it indicates that the following string represents a duration of time
+    // rather than a specific point in time.
+    if (!str || str[0] != PERIOD_DESIGNATOR || str.length < 3) {
         return -1;
     }
     str = str.substring(1); // remove P
-    var seconds = 0;
-    const durationDesignator = 'P';
-    const timeDesignator = 'T';
-    const splits = str.split('T');
-    if (splits.length == 2) {
-        const day = parseDayComponent(splits[0]);
-        const time = parseTimeComponent(splits[1]);
-    }
-    else if (splits.length == 1) { // no Time component
-        parseTimeComponent("");
+    let tmap = timeMap;
+    let dmap = dayMap;
+    if (str.includes(TIME_DESIGNATOR)) {
+        const splits = str.split(TIME_DESIGNATOR);
+        if (splits.length == 2) {
+            dmap = parseDayComponent(splits[0]);
+            tmap = parseTimeComponent(splits[1]);
+        }
+        else {
+            // invalid
+            return -1;
+        }
     }
     else {
-        return -1;
+        // no Time component
+        dmap = parseDayComponent(str);
     }
+    var totalSeconds = 0;
     //console.log(years, months, days, hours, minutes, seconds);
-    return seconds;
+    return getTotalSeconds(dmap, tmap);
 }
 exports.parseDuration = parseDuration;
-// P[n]Y[n]M[n]D T[n]H[n]M[n]S  or  P[n]W
-// For example ‘PT1M1.2S’ converts to 61,2 seconds
-function parseDuration1(durationStr) {
-    // Check initial validness
-    // must have at least one element represented after P, eg "P0D"
-    if (!durationStr || durationStr[0] !== 'P' || durationStr.length < 3) {
-        throw new Error('Invalid duration format');
-    }
-    const timePart = durationStr.indexOf('T');
-    // The month value cannot be used for this conversion and shall result in an error if not set to 0.
-    // P3Y6M0D
-    let years = 0;
-    let months = 0;
-    let days = 0;
-    // Parse year
-    const yearsEnd = durationStr.indexOf('Y');
-    if (yearsEnd !== 0)
-        years = parseInt(durationStr.slice(yearsEnd - 1, yearsEnd));
-    // Parse months
-    const monthsEnd = durationStr.indexOf('M');
-    if (monthsEnd !== 0)
-        months = parseInt(durationStr.slice(monthsEnd - 1, monthsEnd));
-    if (monthsEnd < durationStr.indexOf('T') && months !== 0) {
-        throw new Error('Invalid duration format: months must be 0');
-    }
-    // Parse days
-    const daysEnd = durationStr.indexOf('D');
-    if (daysEnd !== 0) {
-        let amount = 2;
-        if (!isDigit(durationStr[daysEnd - 2])) {
-            amount = 1;
-        }
-        days = parseInt(durationStr.slice(daysEnd - amount, daysEnd));
-    }
-    console.log(years, months, days);
-    //console.log(years, months, days, hours, minutes, seconds, totalSeconds);*/
-    // "P3Y6M1D T12H"
-    // P3Y6M4D T12H30M5S
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-    // Parse hours
-    const hoursEnd = durationStr.indexOf('H');
-    if (hoursEnd !== 0) {
-        let amount = 2;
-        if (!isDigit(durationStr[hoursEnd - 2])) {
-            amount = 1;
-        }
-        hours = parseInt(durationStr.slice(hoursEnd - amount, hoursEnd));
-    }
-    // Parse minutes
-    const minutesEnd = durationStr.lastIndexOf('M');
-    if (minutesEnd !== 0) {
-        let amount = 2;
-        if (!isDigit(durationStr[minutesEnd - 2])) {
-            amount = 1;
-        }
-        minutes = parseInt(durationStr.slice(minutesEnd - amount, minutesEnd));
-    }
-    // Parse seconds
-    const secondsEnd = durationStr.indexOf('S');
-    if (secondsEnd !== 0) {
-        let amount = 2;
-        if (!isDigit(durationStr[secondsEnd - 2])) {
-            amount = 1;
-        }
-        seconds = parseInt(durationStr.slice(secondsEnd - amount, secondsEnd));
-    }
-    console.log(years, months, days, hours, minutes, seconds);
-    minutes *= 60;
-    hours *= 3600;
-    days *= 24 * 3600;
-    return years + months + days + hours + minutes + seconds;
-}
-exports.parseDuration1 = parseDuration1;
 //parseDuration("PT1M1.2S");
-parseDuration('P3Y14DT12H30M55S');
+console.log(parseDuration('P3Y14DT12H30M55S'));
 //parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
 // three years, six months, four days, twelve hours, thirty minutes, and five seconds
 //parseDuration("P3Y6M0DT12H30M5S");
