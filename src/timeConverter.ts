@@ -7,7 +7,8 @@ import { Duration } from './duration'
 export class TimeConverter {
   public static toSeconds (obj: Duration, monthsBanned: boolean = true): number {
     // the month value cannot be used for the conversion and shall result in an error if not set to 0
-    if (obj.months > 0 && monthsBanned === true) return -1
+    if (obj.months > 0 && monthsBanned === true)
+      throw new RangeError(Duration.ERRORS.BANNED_PARAM)
 
     // TODO: months and years are variable!!
     return (

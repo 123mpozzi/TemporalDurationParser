@@ -4,11 +4,12 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimeConverter = void 0;
+const duration_1 = require("./duration");
 class TimeConverter {
     static toSeconds(obj, monthsBanned = true) {
         // the month value cannot be used for the conversion and shall result in an error if not set to 0
         if (obj.months > 0 && monthsBanned === true)
-            return -1;
+            throw new RangeError(duration_1.Duration.ERRORS.BANNED_PARAM);
         // TODO: months and years are variable!!
         return (obj.seconds +
             obj.minutes * 60 +

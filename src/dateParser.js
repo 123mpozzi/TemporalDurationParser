@@ -37,8 +37,6 @@ class DateParser {
     parseTimeComponent(str) {
         this.timeMap = this.parseComponent(this.timeMap, str);
     }
-    // TODO: P0.5Y
-    // TODO:  "PT36H" could be used as well as "P1DT12H"
     parseComponent(map, str) {
         if (this.debug === true)
             console.log('\ncomponent: ' + str);
@@ -61,7 +59,7 @@ class DateParser {
         // it indicates that the following string represents a duration of time
         // rather than a specific point in time.
         if (!str || str[0] != duration_1.Duration.DESIGNATORS.PERIOD || str.length < 3) {
-            throw new RangeError(DateParser.ERR_INVALIDFORMAT);
+            throw new RangeError(duration_1.Duration.ERRORS.INVALID_FORMAT);
         }
         str = str.substring(1); // skip P
         if (str.includes(duration_1.Duration.DESIGNATORS.TIME)) {
@@ -72,7 +70,7 @@ class DateParser {
             }
             else {
                 // invalid
-                throw new RangeError(DateParser.ERR_INVALIDFORMAT);
+                throw new RangeError(duration_1.Duration.ERRORS.INVALID_FORMAT);
             }
         }
         else {
@@ -91,5 +89,4 @@ class DateParser {
         return new duration_1.Duration(years, months, days, hours, minutes, seconds);
     }
 }
-DateParser.ERR_INVALIDFORMAT = 'Invalid format for ISO_8601 Duration';
 exports.DateParser = DateParser;

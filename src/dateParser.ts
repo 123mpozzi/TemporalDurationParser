@@ -11,7 +11,6 @@ import { Duration } from './duration'
 
 export class DateParser {
   private readonly debug: boolean
-  public static readonly ERR_INVALIDFORMAT = 'Invalid format for ISO_8601 Duration'
 
   // maps of day and time component
   private dayMap: Map<string, number>
@@ -48,8 +47,6 @@ export class DateParser {
     this.timeMap = this.parseComponent(this.timeMap, str)
   }
 
-  // TODO: P0.5Y
-  // TODO:  "PT36H" could be used as well as "P1DT12H"
   private parseComponent (
     map: Map<string, number>,
     str: string
@@ -76,7 +73,7 @@ export class DateParser {
     // it indicates that the following string represents a duration of time
     // rather than a specific point in time.
     if (!str || str[0] != Duration.DESIGNATORS.PERIOD || str.length < 3) {
-      throw new RangeError(DateParser.ERR_INVALIDFORMAT)
+      throw new RangeError(Duration.ERRORS.INVALID_FORMAT)
     }
     str = str.substring(1) // skip P
 
@@ -88,7 +85,7 @@ export class DateParser {
         this.parseTimeComponent(splits[1])
       } else {
         // invalid
-        throw new RangeError(DateParser.ERR_INVALIDFORMAT)
+        throw new RangeError(Duration.ERRORS.INVALID_FORMAT)
       }
     } else {
       // no Time component

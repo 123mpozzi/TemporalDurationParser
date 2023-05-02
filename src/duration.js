@@ -18,6 +18,11 @@ var DESIGNATORS;
     DESIGNATORS["MINUTE"] = "M";
     DESIGNATORS["SECOND"] = "S";
 })(DESIGNATORS || (DESIGNATORS = {}));
+var ERRORS;
+(function (ERRORS) {
+    ERRORS["INVALID_FORMAT"] = "Invalid format for ISO_8601 Duration";
+    ERRORS["BANNED_PARAM"] = "Blacklisted parameter detected";
+})(ERRORS || (ERRORS = {}));
 // TODO: weeks!! W
 // TODO: represent everything internally via variables(days,weeks,seconds), and then try to parse the different formats (1: standard, 2: via weeks, 3: via 'agreement' -> the one with '-')
 // ISO_8601 DURATION represenation
@@ -39,8 +44,9 @@ class Duration {
         return new dateParser_1.DateParser().build(str);
     }
     toSeconds(monthsBanned = true) {
-        return timeConverter_1.TimeConverter.toSeconds(this);
+        return timeConverter_1.TimeConverter.toSeconds(this, monthsBanned);
     }
 }
 Duration.DESIGNATORS = DESIGNATORS;
+Duration.ERRORS = ERRORS;
 exports.Duration = Duration;

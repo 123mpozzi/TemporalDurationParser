@@ -28,3 +28,5 @@ console.log(Duration.from("PT1M1S").toSeconds());
 //parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
 // three years, six months, four days, twelve hours, thirty minutes, and five seconds
 //parseDuration("P3Y6M0DT12H30M5S");
+
+Duration.from('T1M1.2S').toSeconds()
