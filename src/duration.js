@@ -17,8 +17,9 @@ var DESIGNATOR;
 class Duration {
     // it is lazy: it does not check on constructor, it just initializes its internal variables
     // checks are on parseDuration();
-    constructor() {
+    constructor(debug = false) {
         this.DESIGNATOR = DESIGNATOR;
+        this.debug = debug;
         // init empty maps
         this.dayMap = this.createDayMap();
         this.timeMap = this.createTimeMap();
@@ -48,7 +49,8 @@ class Duration {
     // TODO: P0.5Y
     // TODO:  "PT36H" could be used as well as "P1DT12H"
     parseComponent(map, str) {
-        console.log(str);
+        if (this.debug === true)
+            console.log("\ncomponent: " + str);
         var splits;
         for (const key of map.keys()) {
             // if param is present
@@ -58,7 +60,8 @@ class Duration {
                 map.set(key, parseFloat(splits[0])); // TODO: parseInt checks?
             }
         }
-        console.log(map.entries()); // TODO: remove: debug
+        if (this.debug === true)
+            console.log(map.entries());
         return map;
     }
     parseDuration(str) {

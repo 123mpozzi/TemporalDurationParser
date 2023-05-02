@@ -4,7 +4,7 @@
   "description": "",
   "main": "convert_format.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "test": "tsc && mocha -r ts-node/register 'tests/**/*.ts'",
     "build": "npm test && tsc",
     "try": "tsc && node ./src/convert_format.js"
   },

@@ -13,6 +13,8 @@ enum DESIGNATOR {
 
 // ISO_8601 DURATION represenation
 export class Duration {
+  private readonly debug: boolean;
+
   private readonly DESIGNATOR = DESIGNATOR;
 
   // maps of day and time component
@@ -21,7 +23,8 @@ export class Duration {
 
   // it is lazy: it does not check on constructor, it just initializes its internal variables
   // checks are on parseDuration();
-  constructor () {
+  constructor (debug: boolean = false) {
+    this.debug = debug;
     // init empty maps
     this.dayMap = this.createDayMap()
     this.timeMap = this.createTimeMap()
@@ -59,7 +62,8 @@ export class Duration {
     map: Map<string, number>,
     str: string
   ): Map<string, number> {
-    console.log(str)
+    if(this.debug === true)
+        console.log("\ncomponent: " + str)
     var splits
     for (const key of map.keys()) {
       // if param is present
@@ -71,7 +75,8 @@ export class Duration {
       }
     }
 
-    console.log(map.entries()) // TODO: remove: debug
+    if(this.debug === true)
+        console.log(map.entries())
     return map
   }
 

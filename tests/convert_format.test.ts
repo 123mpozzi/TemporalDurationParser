@@ -13,14 +13,18 @@ describe('parseDuration', () => {
     //expect(parseDuration('T1H2M3S')).to.equal(-1);
     //expect(parseDuration('P3Y14.5DT12H30M55S')).to.equal(-1);
 
-    expect(new rewiredDuration().parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
-    expect(new rewiredDuration().parseTimeComponent('1M1.2S').getTotalSeconds()).to.equal(61.2);
-    expect(new rewiredDuration().parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+    expect(new rewiredDuration(true).parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
+    expect(new rewiredDuration(true).parseTimeComponent('1M1.2S').getTotalSeconds()).to.equal(61.2);
+    expect(new rewiredDuration(true).parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
   });
 
   it('test parsing whole duration', () => {
-    expect(new Duration().parseDuration('PT1M1.2S')).to.equal(61.2);
-    expect(new Duration().parseDuration('PT1M1S')).to.equal(61);
+    expect(new Duration(true).parseDuration('PT1M1.2S')).to.equal(61.2);
+    expect(new Duration(true).parseDuration('PT1M1S')).to.equal(61);
+
+    // With months not set to 0
+    expect(new Duration(true).parseDuration('P11MT1M1S')).to.equal(-1);
+    expect(new Duration(true).parseDuration('P9MT1M1S')).to.equal(-1);
   });
    /*it('should parse duration in seconds for a valid duration string', () => {
      // Test valid duration string format

@@ -1,17 +1,30 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
 //import { parseDuration } from "../src/convert_format";
 const duration_1 = require("../src/duration");
+const rewire_1 = __importDefault(require("rewire"));
+const rewiredModule = (0, rewire_1.default)('../src/duration');
+const rewiredDuration = rewiredModule.__get__('Duration');
 describe('parseDuration', () => {
-    it('test parsing day component', () => {
+    it('test parsing time component', () => {
         // Test valid duration string format
         //expect(parseDuration('PT1M1.2S')).to.equal(61.2);
         //expect(parseDuration('T1H2M3S')).to.equal(-1);
         //expect(parseDuration('P3Y14.5DT12H30M55S')).to.equal(-1);
-        (0, chai_1.expect)(new duration_1.Duration().parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
-        (0, chai_1.expect)(new duration_1.Duration().parseTimeComponent('PT1M1.2S').getTotalSeconds()).to.equal(61.2);
-        (0, chai_1.expect)(new duration_1.Duration().parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+        (0, chai_1.expect)(new rewiredDuration(true).parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
+        (0, chai_1.expect)(new rewiredDuration(true).parseTimeComponent('1M1.2S').getTotalSeconds()).to.equal(61.2);
+        (0, chai_1.expect)(new rewiredDuration(true).parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+    });
+    it('test parsing whole duration', () => {
+        (0, chai_1.expect)(new duration_1.Duration(true).parseDuration('PT1M1.2S')).to.equal(61.2);
+        (0, chai_1.expect)(new duration_1.Duration(true).parseDuration('PT1M1S')).to.equal(61);
+        // With months not set to 0
+        (0, chai_1.expect)(new duration_1.Duration(true).parseDuration('P11MT1M1S')).to.equal(-1);
+        (0, chai_1.expect)(new duration_1.Duration(true).parseDuration('P9MT1M1S')).to.equal(-1);
     });
     /*it('should parse duration in seconds for a valid duration string', () => {
       // Test valid duration string format
