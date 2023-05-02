@@ -12,9 +12,9 @@ import { Duration } from "./duration";
 // TODO: pretty docs (also returns types, see typescript)
 // Parse ISO_8601 Durations
 // https://en.wikipedia.org/wiki/ISO_8601#Durations
-const dur1 = new Duration();
+//const dur1 = new Duration();
 //const dur2 = new Duration().parseDayComponent('3Y14.5DT12H30M55S');
-const dur2 = new Duration();
+//const dur2 = new Duration();
 
 //parseDuration("PT1M1.2S");
 
@@ -22,8 +22,8 @@ const dur2 = new Duration();
 
 //console.log(dur1.parseDuration('P3Y14DT12H30M55S'));
 //console.log(dayMap.entries())
-console.log(dur1.parseDuration("PT1M1.2S"));
-console.log(dur2.parseDuration("PT1M1S"));
+console.log(Duration.from("PT1M1.2S").toSeconds());
+console.log(Duration.from("PT1M1S").toSeconds());
 //console.log(dur1.parseDayComponent("PT1M1.2S"));
 //parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
 // three years, six months, four days, twelve hours, thirty minutes, and five seconds
