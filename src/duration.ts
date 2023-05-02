@@ -45,7 +45,7 @@ export class Duration {
     this.seconds = seconds
   }
 
-  public static fromObj(obj: Duration): Duration {
+  public static copy(obj: Duration): Duration {
     return new Duration(obj.years, obj.months, obj.weeks, obj.days, obj.hours, obj.minutes, obj.seconds);
   }
 

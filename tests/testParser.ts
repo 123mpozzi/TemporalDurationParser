@@ -1,24 +1,19 @@
 import { expect } from "chai";
 import {  Duration } from "../src/duration";
 
-describe('parseDuration', () => {
+describe('DateParser', () => {
   it('test throw error on invalid formats', () => {
-    // The tests checking throws do not work because I didn't know how to use 'bind'
-    // for checking that the same exact error object is thrown
-    expect(function(){
-      Duration.from('T1M1.2S').toSeconds();
-    }).to.throw(new RangeError(Duration.ERRORS.INVALID_FORMAT));
-
-    expect(function(){
-      Duration.from('PT').toSeconds();
-    }).to.throw(new RangeError(Duration.ERRORS.INVALID_FORMAT));
+    let badCall = function () { Duration.from('PT').toSeconds(); };
+    expect(badCall).to.throw(RangeError, Duration.ERRORS.INVALID_FORMAT);
+    badCall = function () { Duration.from('T1M1.2S').toSeconds(); };
+    expect(badCall).to.throw(RangeError, Duration.ERRORS.INVALID_FORMAT);
   });
 
   it('test throw error on months not set to 0', () => {
-    // The tests checking throws do not work because I didn't know how to use 'bind'
-    // for checking that the same exact error object is thrown
-    expect(Duration.from('P11MT1M1S').toSeconds()).to.throw(new RangeError(Duration.ERRORS.BANNED_PARAM));
-    expect(Duration.from('P9MT1M1S').toSeconds()).to.throw(new RangeError(Duration.ERRORS.BANNED_PARAM));
+    let badCall = function () { Duration.from('P11MT1M1S').toSeconds(); };
+    expect(badCall).to.throw(RangeError, Duration.ERRORS.BANNED_PARAM);
+    badCall = function () { Duration.from('P9MT1M1S').toSeconds(); };
+    expect(badCall).to.throw(RangeError, Duration.ERRORS.BANNED_PARAM);
   });
 
   it('test normal strings', () => {
@@ -27,9 +22,8 @@ describe('parseDuration', () => {
   });
 
   it('test minutes vs months (both have designator M)', () => {
-    // The tests checking throws do not work because I didn't know how to use 'bind'
-    // for checking that the same exact error object is thrown
-    expect(Duration.from('P1M').toSeconds()).to.throw(new RangeError(Duration.ERRORS.BANNED_PARAM));
+    let badCall = function () { Duration.from('P1M').toSeconds(); };
+    expect(badCall).to.throw(RangeError, Duration.ERRORS.BANNED_PARAM);
     expect(Duration.from('PT1M').toSeconds()).to.equal(60);
   });
 

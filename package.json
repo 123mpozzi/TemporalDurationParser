@@ -2,13 +2,13 @@
   "name": "0205-chall",
   "version": "1.0.0",
   "description": "",
-  "main": "convert_format.ts",
+  "main": "example.ts",
   "scripts": {
     "test": "tsc && mocha -r ts-node/register 'tests/**/*.ts'",
     "build": "npm test && tsc",
-    "try": "tsc && node ./src/convert_format.js"
+    "try": "tsc && node ./src/example.js"
   },
-  "author": "",
+  "author": "Michele Pozzi",
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.3.5",
