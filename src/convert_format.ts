@@ -12,41 +12,18 @@ import { Duration } from "./duration";
 // TODO: pretty docs (also returns types, see typescript)
 // Parse ISO_8601 Durations
 // https://en.wikipedia.org/wiki/ISO_8601#Durations
-export function parseDuration (str: string): number {
-  // it is lazy: it does not check on constructor, it just initializes its internal variables
-  const duration: Duration = new Duration();
-
-  // P signals the start of the duration representation
-  // it indicates that the following string represents a duration of time
-  // rather than a specific point in time.
-  if (!str || str[0] != duration.PERIOD_DESIGNATOR || str.length < 3) {
-    return -1
-  }
-  str = str.substring(1) // remove P
-
-  if (str.includes(duration.TIME_DESIGNATOR)) {
-    const splits = str.split(duration.TIME_DESIGNATOR)
-
-    if (splits.length == 2) {
-      duration.parseDayComponent(splits[0])
-      duration.parseTimeComponent(splits[1])
-    } else {
-      // invalid
-      return -1
-    }
-  } else {
-    // no Time component
-    duration.parseDayComponent(str)
-  }
-
-  return duration.getTotalSeconds();
-}
+const dur1 = new Duration();
+const dur2 = new Duration().parseDayComponent('3Y14.5DT12H30M55S');
 
 //parseDuration("PT1M1.2S");
 
-console.log(parseDuration('P3Y14DT12H30M55S'));
+// TODO: try laziness: parse one string and CHECK, parse another and CHECK, and so on!
+
+//console.log(dur1.parseDuration('P3Y14DT12H30M55S'));
 //console.log(dayMap.entries())
-console.log(parseDuration("PT1M1.2S"));
+console.log(dur1.parseDuration("PT1M1.2S"));
+console.log(dur2.parseDuration("PT1M1S"));
+//console.log(dur1.parseDayComponent("PT1M1.2S"));
 //parseDuration('P3Y0M14DT12H30M55S');//('P3Y0M1DT12H')
 // three years, six months, four days, twelve hours, thirty minutes, and five seconds
 //parseDuration("P3Y6M0DT12H30M5S");

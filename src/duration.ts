@@ -1,18 +1,26 @@
+// TODO: Alternatively, a format for duration based on combined date and time representations may be used by agreement between the communicating parties either in the basic format PYYYYMMDDThhmmss or in the extended format P[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]. For example, the first duration shown above would be "P0003-06-04T12:30:05". However, individual date and time values cannot exceed their moduli (e.g. a value of 13 for the month or 25 for the hour would not be permissible).
+
+enum DESIGNATOR {
+    PERIOD = 'P',
+    TIME = 'T',
+    YEAR = 'Y',
+    MONTH = 'M',
+    DAY = 'D',
+    HOUR = 'H',
+    MINUTE = 'M',
+    SECOND = 'S',
+}
+
 // ISO_8601 DURATION represenation
 export class Duration {
-  readonly PERIOD_DESIGNATOR: string = 'P'
-  readonly TIME_DESIGNATOR: string = 'T'
-  readonly YEAR_DESIGNATOR: string = 'Y'
-  readonly MONTH_DESIGNATOR: string = 'M'
-  readonly DAY_DESIGNATOR: string = 'D'
-  readonly HOUR_DESIGNATOR: string = 'H'
-  readonly MINUTE_DESIGNATOR: string = 'M'
-  readonly SECOND_DESIGNATOR: string = 'S'
+  private readonly DESIGNATOR = DESIGNATOR;
 
   // maps of day and time component
   private dayMap: Map<string, number>
   private timeMap: Map<string, number>
 
+  // it is lazy: it does not check on constructor, it just initializes its internal variables
+  // checks are on parseDuration();
   constructor () {
     // init empty maps
     this.dayMap = this.createDayMap()
@@ -21,17 +29,17 @@ export class Duration {
 
   private createDayMap (): Map<string, number> {
     const dayMap: Map<string, number> = new Map()
-    dayMap.set(this.YEAR_DESIGNATOR, 0)
-    dayMap.set(this.MONTH_DESIGNATOR, 0)
-    dayMap.set(this.DAY_DESIGNATOR, 0)
+    dayMap.set(this.DESIGNATOR.YEAR, 0)
+    dayMap.set(this.DESIGNATOR.MONTH, 0)
+    dayMap.set(this.DESIGNATOR.DAY, 0)
     return dayMap
   }
 
   private createTimeMap (): Map<string, number> {
     const timeMap: Map<string, number> = new Map()
-    timeMap.set(this.HOUR_DESIGNATOR, 0)
-    timeMap.set(this.MINUTE_DESIGNATOR, 0)
-    timeMap.set(this.SECOND_DESIGNATOR, 0)
+    timeMap.set(this.DESIGNATOR.HOUR, 0)
+    timeMap.set(this.DESIGNATOR.MINUTE, 0)
+    timeMap.set(this.DESIGNATOR.SECOND, 0)
     return timeMap
   }
 
@@ -59,7 +67,7 @@ export class Duration {
         splits = str.split(key)
 
         str = splits[1]
-        map.set(key, parseInt(splits[0])) // TODO: parseInt checks?
+        map.set(key, parseFloat(splits[0])) // TODO: parseInt checks?
       }
     }
 
@@ -67,14 +75,45 @@ export class Duration {
     return map
   }
 
-  getTotalSeconds (): number {
-    const seconds = this.timeMap.get(this.SECOND_DESIGNATOR) || 0
-    const minutes = this.timeMap.get(this.MINUTE_DESIGNATOR) || 0
-    const hours = this.timeMap.get(this.HOUR_DESIGNATOR) || 0
+  public parseDuration(str: string): number {
+    // P signals the start of the duration representation
+    // it indicates that the following string represents a duration of time
+    // rather than a specific point in time.
+    if (!str || str[0] != this.DESIGNATOR.PERIOD || str.length < 3) {
+      return -1
+    }
+    str = str.substring(1) // remove P
+  
+    if (str.includes(this.DESIGNATOR.TIME)) {
+      const splits = str.split(this.DESIGNATOR.TIME)
+  
+      if (splits.length == 2) {
+        this.parseDayComponent(splits[0])
+        this.parseTimeComponent(splits[1])
+      } else {
+        // invalid
+        return -1
+      }
+    } else {
+      // no Time component
+      this.parseDayComponent(str)
+    }
+  
+    return this.getTotalSeconds();
+  }
 
-    const days = this.dayMap.get(this.DAY_DESIGNATOR) || 0
-    const months = this.dayMap.get(this.MONTH_DESIGNATOR) || 0
-    const years = this.dayMap.get(this.YEAR_DESIGNATOR) || 0
+  getTotalSeconds (): number {
+    const seconds = this.timeMap.get(this.DESIGNATOR.SECOND) || 0
+    const minutes = this.timeMap.get(this.DESIGNATOR.MINUTE) || 0
+    const hours = this.timeMap.get(this.DESIGNATOR.HOUR) || 0
+
+    const days = this.dayMap.get(this.DESIGNATOR.DAY) || 0
+    const months = this.dayMap.get(this.DESIGNATOR.MONTH) || 0
+    const years = this.dayMap.get(this.DESIGNATOR.YEAR) || 0
+
+    // the month value cannot be used for the conversion and shall result in an error if not set to 0
+    if(months > 0)
+        return -1;
 
     // TODO: months and years are variable!!
     return (

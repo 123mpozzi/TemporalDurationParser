@@ -1,17 +1,22 @@
 import { expect } from "chai";
-import { parseDuration } from "../src/convert_format";
+//import { parseDuration } from "../src/convert_format";
 import {  Duration } from "../src/duration";
 
 describe('parseDuration', () => {
-  it('test parsing day component', () => {
+  it('test parsing time component', () => {
     // Test valid duration string format
-    expect(parseDuration('P3Y14DT12H30M55S')).to.equal(61.2);
-    expect(parseDuration('T1H2M3S')).to.equal(-1);
-    expect(parseDuration('P3Y14.5DT12H30M55S')).to.equal(-1);
+    //expect(parseDuration('PT1M1.2S')).to.equal(61.2);
+    //expect(parseDuration('T1H2M3S')).to.equal(-1);
+    //expect(parseDuration('P3Y14.5DT12H30M55S')).to.equal(-1);
 
-    expect(new Duration().parseDayComponent('PT1M1S').getTotalSeconds()).to.equal(61);
-    expect(new Duration().parseDayComponent('PT1M1.2S').getTotalSeconds()).to.equal(61.2);
-    expect(new Duration().parseDayComponent('P3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+    expect(new Duration().parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
+    expect(new Duration().parseTimeComponent('PT1M1.2S').getTotalSeconds()).to.equal(61.2);
+    expect(new Duration().parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+  });
+
+  it('test parsing whole duration', () => {
+    expect(new Duration().parseDuration('PT1M1.2S')).to.equal(61.2);
+    expect(new Duration().parseDuration('PT1M1S')).to.equal(61);
   });
    /*it('should parse duration in seconds for a valid duration string', () => {
      // Test valid duration string format

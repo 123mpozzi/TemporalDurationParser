@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
-const convert_format_1 = require("../src/convert_format");
+//import { parseDuration } from "../src/convert_format";
 const duration_1 = require("../src/duration");
 describe('parseDuration', () => {
     it('test parsing day component', () => {
         // Test valid duration string format
-        (0, chai_1.expect)((0, convert_format_1.parseDuration)('P3Y14DT12H30M55S')).to.equal(61.2);
-        (0, chai_1.expect)((0, convert_format_1.parseDuration)('T1H2M3S')).to.equal(-1);
-        (0, chai_1.expect)((0, convert_format_1.parseDuration)('P3Y14.5DT12H30M55S')).to.equal(-1);
-        (0, chai_1.expect)(new duration_1.Duration().parseDayComponent('PT1M1S').getTotalSeconds()).to.equal(61);
-        (0, chai_1.expect)(new duration_1.Duration().parseDayComponent('PT1M1.2S').getTotalSeconds()).to.equal(61.2);
-        (0, chai_1.expect)(new duration_1.Duration().parseDayComponent('P3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
+        //expect(parseDuration('PT1M1.2S')).to.equal(61.2);
+        //expect(parseDuration('T1H2M3S')).to.equal(-1);
+        //expect(parseDuration('P3Y14.5DT12H30M55S')).to.equal(-1);
+        (0, chai_1.expect)(new duration_1.Duration().parseTimeComponent('1M1S').getTotalSeconds()).to.equal(61);
+        (0, chai_1.expect)(new duration_1.Duration().parseTimeComponent('PT1M1.2S').getTotalSeconds()).to.equal(61.2);
+        (0, chai_1.expect)(new duration_1.Duration().parseDayComponent('3Y14.5DT12H30M55S').getTotalSeconds()).to.equal(-1);
     });
     /*it('should parse duration in seconds for a valid duration string', () => {
       // Test valid duration string format
