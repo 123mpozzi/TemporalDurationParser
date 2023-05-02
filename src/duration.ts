@@ -43,12 +43,12 @@ export class Duration {
     return timeMap
   }
 
-  parseDayComponent (str: string): Duration {
+  private parseDayComponent (str: string): Duration {
     this.dayMap = this.parseComponent(this.dayMap, str)
     return this
   }
 
-  parseTimeComponent (str: string): Duration {
+  private parseTimeComponent (str: string): Duration {
     this.timeMap = this.parseComponent(this.timeMap, str)
     return this
   }
@@ -102,7 +102,7 @@ export class Duration {
     return this.getTotalSeconds();
   }
 
-  getTotalSeconds (): number {
+  private getTotalSeconds (): number {
     const seconds = this.timeMap.get(this.DESIGNATOR.SECOND) || 0
     const minutes = this.timeMap.get(this.DESIGNATOR.MINUTE) || 0
     const hours = this.timeMap.get(this.DESIGNATOR.HOUR) || 0

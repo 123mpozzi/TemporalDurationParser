@@ -13,7 +13,8 @@ import { Duration } from "./duration";
 // Parse ISO_8601 Durations
 // https://en.wikipedia.org/wiki/ISO_8601#Durations
 const dur1 = new Duration();
-const dur2 = new Duration().parseDayComponent('3Y14.5DT12H30M55S');
+//const dur2 = new Duration().parseDayComponent('3Y14.5DT12H30M55S');
+const dur2 = new Duration();
 
 //parseDuration("PT1M1.2S");
 
