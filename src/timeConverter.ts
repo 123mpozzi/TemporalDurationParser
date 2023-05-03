@@ -3,14 +3,14 @@ import { Duration } from './duration'
 /**
  * Multipliers used to convert attributes into seconds
  */
-enum MULTIPLIERS {
+enum MULTIPLIER_2SEC {
   SECONDS = 1,
-  MINUTES = 60,
-  HOURS = 60 * 60,
-  DAYS = 24 * 60 * 60,
-  WEEKS = 7 * 24 * 60 * 60,
-  MONTHS = 30 * 24 * 60 * 60,
-  YEARS = 12 * 30 * 24 * 60 * 60,
+  MINUTES = 60 * SECONDS,
+  HOURS = 60 * MINUTES,
+  DAYS = 24 * HOURS,
+  WEEKS = 7 * DAYS,
+  MONTHS = 30 * DAYS,
+  YEARS = 12 * MONTHS,
 }
 
 /**
@@ -33,17 +33,17 @@ export class TimeConverter {
   public seconds (monthsBanned: boolean = true): number {
     // the month value cannot be used for the conversion and shall result in an error if not set to 0
     if (this.duration.months > 0 && monthsBanned === true)
-      throw new RangeError(Duration.ERRORS.BANNED_PARAM)
+      throw new RangeError(Duration.ERROR_MSG.BANNED_PARAM)
 
     // TODO: months and years are variable!!
     return (
       this.duration.seconds +
-      this.duration.minutes * MULTIPLIERS.MINUTES +
-      this.duration.hours * MULTIPLIERS.HOURS +
-      this.duration.days * MULTIPLIERS.DAYS +
-      this.duration.weeks * MULTIPLIERS.WEEKS +
-      this.duration.months * MULTIPLIERS.MONTHS +
-      this.duration.years * MULTIPLIERS.YEARS
+      this.duration.minutes * MULTIPLIER_2SEC.MINUTES +
+      this.duration.hours * MULTIPLIER_2SEC.HOURS +
+      this.duration.days * MULTIPLIER_2SEC.DAYS +
+      this.duration.weeks * MULTIPLIER_2SEC.WEEKS +
+      this.duration.months * MULTIPLIER_2SEC.MONTHS +
+      this.duration.years * MULTIPLIER_2SEC.YEARS
     )
   }
 }

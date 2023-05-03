@@ -6,22 +6,22 @@ import { Duration } from './duration'
 enum FORMAT_TYPE {
   CLASSIC,
   WEEKS,
-  COMBINED,
+  COMBINED
 }
 
 /**
  * Component responsible for parsing the string and adding data to the Duration model
  *
  * 3 types of parsing
- * - classic  
+ * - classic
  *   `P[n]Y[n]M[n]DT[n]H[n]M[n]S`
- * - weeks  
+ * - weeks
  *   `P[n]W`
- * - combined  
+ * - combined
  *   `P0003-06-04T12:30:05`
  *
- * The last one is not yet implemented, here is its description:  
- * 
+ * The last one is not yet implemented, here is its description:
+ *
  * Alternatively, a format for duration based on combined date and time
  * representations may be used by agreement between the communicating parties either
  * in the basic format PYYYYMMDDThhmmss or in the extended format
@@ -34,93 +34,78 @@ enum FORMAT_TYPE {
 export class DateParser {
   private readonly debug: boolean
 
-  // maps of day and time component
   /**
-   * {@link Map} representation of the Day component  
-   * 
+   * {@link Map} representation of the DAY component
+   *
    * eg. `3Y0M4D` becomes `{ [ 'Y', 3 ], [ 'M', 0 ], [ 'W', 0 ], [ 'D', 4 ] }`
    */
   private dayMap: Map<string, number>
   /**
-   * {@link Map}  representation of the Time component  
-   * 
+   * {@link Map}  representation of the TIME component
+   *
    * eg. `01M1.2S` becomes `{ [ 'H', 0 ], [ 'M', 1 ], [ 'S', 1.2 ] }`
    */
   private timeMap: Map<string, number>
 
   constructor (debug: boolean = false) {
     this.debug = debug
-    // init maps with values set to 0
-    this.dayMap = this.initDayMap()
-    this.timeMap = this.initTimeMap()
+
+    const dayMapKeys = [
+      Duration.DESIGNATORS.YEAR,
+      Duration.DESIGNATORS.MONTH,
+      Duration.DESIGNATORS.WEEK,
+      Duration.DESIGNATORS.DAY
+    ]
+    this.dayMap = this.initMap(dayMapKeys)
+
+    const timeMapKeys = [
+      Duration.DESIGNATORS.HOUR,
+      Duration.DESIGNATORS.MINUTE,
+      Duration.DESIGNATORS.SECOND
+    ]
+    this.timeMap = this.initMap(timeMapKeys)
   }
 
   /**
-   * Initialize an internal {@link Map}  used to represent the Day component.  
+   * Initialize an internal {@link Map}  used to represent either
+   * the TIME or DAY component of the Duration string.
+   *
+   * Having different maps make it simple to distinguish between designators
+   * with the same character identifier, like *months* and *minutes*, both
+   * identified by `'M'`.
    * 
-   * This is useful because I can easily distinguish between *months* and
-   * *minutes*, which have the same `'M'` designator
-   * @returns zero-filled {@link Map} with keys representing attributes of the Day component
+   * @param arr Array of {@link Duration.DESIGNATORS} to use as keys of the map
+   * @returns zero-filled {@link Map} with `arr` values as keys
    */
-  private initDayMap (): Map<string, number> {
-    const dayMap: Map<string, number> = new Map()
-    dayMap.set(Duration.DESIGNATORS.YEAR, 0)
-    dayMap.set(Duration.DESIGNATORS.MONTH, 0)
-    dayMap.set(Duration.DESIGNATORS.WEEK, 0)
-    dayMap.set(Duration.DESIGNATORS.DAY, 0)
-    return dayMap
-  }
+  private initMap (arr: Array<any>): Map<string, number> {
+    const map: Map<string, number> = new Map()
 
+    for (const d of arr)
+      map.set(d, 0)
+
+    return map
+  }
+  
   /**
-   * Initialize an internal {@link Map}  used to represent the Time component.  
+   * Parse either the DAY or the TIME component of the classic format.
    * 
-   * This is useful because I can easily distinguish between *months* and
-   * *minutes*, which have the same `'M'` designator
-   * @returns zero-filled {@link Map} with keys representing attributes of the Time component
-   */
-  private initTimeMap (): Map<string, number> {
-    const timeMap: Map<string, number> = new Map()
-    timeMap.set(Duration.DESIGNATORS.HOUR, 0)
-    timeMap.set(Duration.DESIGNATORS.MINUTE, 0)
-    timeMap.set(Duration.DESIGNATORS.SECOND, 0)
-    return timeMap
-  }
-
-  /**
-   * Fill the internal {@link dayMap} with data from Temporal.Duration's day component
-   * @param str Temporal.Duration's day component (substring before the `'T'`)
-   */
-  private parseDayComponent (str: string): void {
-    this.dayMap = this.parseComponent(this.dayMap, str)
-  }
-
-  /**
-   * Fill the internal {@link timeMap} with data from Temporal.Duration's time component
-   * @param str Temporal.Duration's time component (substring after the `'T'`)
-   */
-  private parseTimeComponent (str: string): void {
-    this.timeMap = this.parseComponent(this.timeMap, str)
-  }
-
-  /**
-   * Parse a component of the classic format: either the Day component or the Time component
-   * @param map the {@link Map} to fill with the parsed values
-   * @param str string to parse attributes from
-   * @returns the {@link Map} filled with parsed attributes
+   * For each designator in the component: parse its value and add it to the given map.
+   * @param map the {@link Map} to update
+   * @param str string representing the component
+   * @returns the {@link Map} with updated values
    */
   private parseComponent (
     map: Map<string, number>,
     str: string
   ): Map<string, number> {
     if (this.debug === true) console.log('\ncomponent: ' + str)
-    let splits
-    for (const key of map.keys()) {
-      // if param is present
-      if (str.includes(key)) {
-        splits = str.split(key)
 
-        str = splits[1]
-        map.set(key, parseFloat(splits[0]))
+    for (const key of map.keys()) {  // for each attribute
+      if (str.includes(key)) {  // if attribute is present
+        const splits = str.split(key)
+
+        str = splits[1]  // set to the remaining substring which still need parsing
+        map.set(key, parseFloat(splits[0]))  // update map with its parsed value
       }
     }
 
@@ -129,30 +114,27 @@ export class DateParser {
   }
 
   /**
-   * Parse the classic format: `P[n]Y[n]M[n]DT[n]H[n]M[n]S`
-   * @param str string to parse
+   * Parse the {@link FORMAT_TYPE.CLASSIC} format: `P[n]Y[n]M[n]DT[n]H[n]M[n]S`
+   * @param str ISO_8601 string
    * @throws on invalid ISO_8601 format {@link RangeError}
    */
-  private parseClassicFormat(str: string): void {
-    if (str.includes(Duration.DESIGNATORS.TIME)) {
+  private parseClassicFormat (str: string): void {
+    if (str.includes(Duration.DESIGNATORS.TIME)) {  // Time component is present: parse it
       const splits = str.split(Duration.DESIGNATORS.TIME)
 
-      if (splits.length == 2) {
-        this.parseDayComponent(splits[0])
-        this.parseTimeComponent(splits[1])
-      } else {
-        // invalid
-        throw new RangeError(Duration.ERRORS.INVALID_FORMAT)
-      }
-    } else {
-      // there is no Time component
-      this.parseDayComponent(str)
+      if (splits.length == 2)
+        this.timeMap = this.parseComponent(this.timeMap, splits[1])
+      else
+        throw new RangeError(Duration.ERROR_MSG.INVALID_FORMAT)
     }
+    
+    this.dayMap = this.parseComponent(this.dayMap, str)  // always parse Day component
   }
 
   /**
-   * Parse the weeks format: `P[n]W`
-   * @param str string to parse
+   * Parse the {@link FORMAT_TYPE.WEEKS} format: `P[n]W`
+   * @param str ISO_8601 string
+   * // TODO: throws on invalid string
    */
   private parseWeeksFormat (str: string): void {
     if (this.debug === true) console.log('\ncomponent: ' + str)
@@ -161,53 +143,50 @@ export class DateParser {
   }
 
   /**
-   * Parse the string
-   * @param str string to parse
+   * Parse ISO_8601 string of given format
+   * @param str ISO_8601 string
    * @param formatType {@link FORMAT_TYPE} of the ISO_8601 string
    */
-  private parseFormat(str: string, formatType: FORMAT_TYPE) {
-    if (formatType === FORMAT_TYPE.WEEKS) {
+  private parseFormat (str: string, formatType: FORMAT_TYPE) {
+    if (formatType === FORMAT_TYPE.WEEKS)
       this.parseWeeksFormat(str)
-    } else {
+    else
       this.parseClassicFormat(str)
-    }
   }
 
   /**
-   * Logic used to identify which format the string to parse is written in
-   * @param str string to parse
+   * Logic used to identify the format of the ISO_8601 string
+   * @param str ISO_8601 string
    * @returns the {@link FORMAT_TYPE} of ISO_8601
    */
-  private identifyFormat(str: string): FORMAT_TYPE {
-    if (str.includes(Duration.DESIGNATORS.WEEK)) {
-      return FORMAT_TYPE.WEEKS;
-    } else {
-      return FORMAT_TYPE.CLASSIC;
-    }
+  private identifyFormat (str: string): FORMAT_TYPE {
+    if (str.includes(Duration.DESIGNATORS.WEEK))
+      return FORMAT_TYPE.WEEKS
+    else
+      return FORMAT_TYPE.CLASSIC
   }
 
   /**
    * Build a {@link Duration} object by fetching values from the internal maps
-   * @param str 
-   * @returns model filled with attributes from {@link dayMap} and {@link timeMap} 
+   * after parsing an ISO_8601 string
+   * @param str ISO_8601 string
+   * @returns model filled with attributes from {@link dayMap} and {@link timeMap}
    * @throws on invalid ISO_8601 format {@link RangeError}
    */
   public build (str: string): Duration {
-    // P signals the start of the duration representation
-    // it indicates that the following string represents a
-    // duration of time rather than a specific point in time.
     if (!str || str[0] != Duration.DESIGNATORS.PERIOD || str.length < 3)
-      throw new RangeError(Duration.ERRORS.INVALID_FORMAT)
-    str = str.substring(1) // skip P
+      throw new RangeError(Duration.ERROR_MSG.INVALID_FORMAT)
+    str = str.substring(1)  // skip P
 
-    const formatType = this.identifyFormat(str);
-    this.parseFormat(str, formatType);
+    // Identify the format and parse the ISO_8601 string
+    this.parseFormat(str, this.identifyFormat(str))
 
     return this.createModel()
   }
 
   /**
-   * Create a {@link Duration} model with the attributes inside {@link dayMap} and {@link timeMap}
+   * Create a {@link Duration} model and fill it with the attributes
+   * inside {@link dayMap} and {@link timeMap}
    * @returns resulting model
    */
   private createModel (): Duration {
