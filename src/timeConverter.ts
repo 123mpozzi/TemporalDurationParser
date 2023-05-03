@@ -1,4 +1,4 @@
-import { Duration } from './duration'
+import { Duration, ERROR_MSG } from './internal'
 
 /**
  * Multipliers used to convert attributes into seconds
@@ -33,7 +33,7 @@ export class TimeConverter {
   public seconds (monthsBanned: boolean = true): number {
     // the month value cannot be used for the conversion and shall result in an error if not set to 0
     if (this.duration.months > 0 && monthsBanned === true)
-      throw new RangeError(Duration.ERROR_MSG.BANNED_PARAM)
+      throw new RangeError(ERROR_MSG.BANNED_PARAM)
 
     // TODO: months and years are variable!!
     return (

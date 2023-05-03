@@ -1,4 +1,4 @@
-import { Duration } from "./duration";
+import { Duration } from "./internal";
 
 
 // set to true to see internal date and time maps

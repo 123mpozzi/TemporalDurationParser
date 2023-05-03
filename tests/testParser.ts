@@ -1,19 +1,19 @@
 import { expect } from "chai";
-import {  Duration } from "../src/duration";
+import {  Duration, ERROR_MSG } from "../src/internal";
 
 describe('DateParser', () => {
   it('test throw error on invalid formats', () => {
     let badCall = function () { Duration.from('PT').to.seconds(); };
-    expect(badCall).to.throw(RangeError, Duration.ERROR_MSG.INVALID_FORMAT);
+    expect(badCall).to.throw(RangeError, ERROR_MSG.INVALID_FORMAT);
     badCall = function () { Duration.from('T1M1.2S').to.seconds(); };
-    expect(badCall).to.throw(RangeError, Duration.ERROR_MSG.INVALID_FORMAT);
+    expect(badCall).to.throw(RangeError, ERROR_MSG.INVALID_FORMAT);
   });
 
   it('test throw error on months not set to 0', () => {
     let badCall = function () { Duration.from('P11MT1M1S').to.seconds(); };
-    expect(badCall).to.throw(RangeError, Duration.ERROR_MSG.BANNED_PARAM);
+    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM);
     badCall = function () { Duration.from('P9MT1M1S').to.seconds(); };
-    expect(badCall).to.throw(RangeError, Duration.ERROR_MSG.BANNED_PARAM);
+    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM);
   });
 
   it('test normal strings', () => {
@@ -23,7 +23,7 @@ describe('DateParser', () => {
 
   it('test minutes vs months (both have designator M)', () => {
     let badCall = function () { Duration.from('P1M').to.seconds(); };
-    expect(badCall).to.throw(RangeError, Duration.ERROR_MSG.BANNED_PARAM);
+    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM);
     expect(Duration.from('PT1M').to.seconds()).to.equal(60);
   });
 

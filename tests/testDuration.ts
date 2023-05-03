@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Duration } from '../src/duration'
+import { Duration } from '../src/internal'
 
 describe('Duration', () => {
   it('test correct declaration of properties', () => {
