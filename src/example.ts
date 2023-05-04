@@ -5,7 +5,7 @@ import { Duration } from "./internal";
 const debug: boolean = true;
 
 console.log(Duration.from("P3Y0M4DT12H30M5S", debug).to.seconds());
-console.log(Duration.from("P00M1.2S", debug).to.seconds());
+console.log(Duration.from("PT00M1.2S", debug).to.seconds());
 console.log(Duration.from("P3DT4H59M", debug).to.seconds());
 console.log(Duration.from("PT0.0021S", debug).to.seconds());
 console.log(Duration.from("P0D", debug).to.seconds());

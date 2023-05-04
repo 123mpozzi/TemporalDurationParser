@@ -51,6 +51,7 @@ class ClassicParser {
 
     if (str.includes(DESIGNATORS.TIME)) {  // Time component is present: parse it
       const splits = str.split(DESIGNATORS.TIME)
+      str = splits[0] // update dayMap string
 
       if (splits.length == 2)
         timeMap = ClassicParser.parseComponent(timeMap, splits[1], debug)
