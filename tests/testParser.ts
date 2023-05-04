@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import {  Duration, ERROR_MSG } from "../src/internal";
+import { Duration, ERROR_MSG } from "../src/internal";
 
 describe('DateParser', () => {
   it('test throw error on invalid formats', () => {

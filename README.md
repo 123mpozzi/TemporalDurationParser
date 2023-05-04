@@ -57,7 +57,7 @@ responsible for handling time conversions
 
 ## Limitations
 
-There are still some issues:
+
 - I did implement these **two formats**: `P[n]Y[n]M[n]DT[n]H[n]M[n]S` and `P[n]W`, but I didn't implement this last format: `P0003-06-04T12:30:05`
-- In the calculation of the total seconds I didn't find a way to precisely calculate the seconds for **variable parameters** like YEAR (365 to 366 days) and MONTH (28 to 31 days) 
+- Note that when calculating total seconds, there are attributes which are **not fixed length**: *months* and *years*.  In this case a month is considered 30 days and a year 12 months.
 
