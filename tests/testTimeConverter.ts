@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { Duration } from '../src/internal'
-import { MULTIPLIER_2SEC } from '../src/internal'
+import { Duration, MULTIPLIER_2SEC } from '../src/internal'
 
 describe('TimeConverter', () => {
   it('test custom multipliers', () => {

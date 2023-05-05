@@ -43,7 +43,7 @@ export class TimeConverter {
     yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
   ): number {
     // the month value cannot be used for the conversion and shall result in an error if not set to 0
-    if (this.duration.months > 0 && monthsBanned === true) throw new RangeError(ERROR_MSG.BANNED_PARAM)
+    if (this.duration.months > 0 && monthsBanned) throw new RangeError(ERROR_MSG.BANNED_PARAM)
 
     return (
       this.duration.seconds +

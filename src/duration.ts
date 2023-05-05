@@ -1,5 +1,4 @@
-import { DateParser } from './internal'
-import { TimeConverter } from './internal'
+import { DateParser, TimeConverter } from './internal'
 
 /**
  * Designators are characters used to identify properties inside a ISO_8601 Duration representation
@@ -40,6 +39,7 @@ export class Duration {
     DESIGNATORS.WEEK,
     DESIGNATORS.DAY
   ]
+
   /** Keys used to represent a {@link Map} of the TIME component */
   private static readonly timeMapKeys = [DESIGNATORS.HOUR, DESIGNATORS.MINUTE, DESIGNATORS.SECOND]
 
@@ -100,14 +100,14 @@ export class Duration {
    * @returns new instance of {@link Duration}
    */
   public static fromMaps(dayMap: Map<string, number>, timeMap: Map<string, number>): Duration {
-    const seconds = timeMap.get(DESIGNATORS.SECOND) || 0
-    const minutes = timeMap.get(DESIGNATORS.MINUTE) || 0
-    const hours = timeMap.get(DESIGNATORS.HOUR) || 0
+    const seconds: number = timeMap.get(DESIGNATORS.SECOND) || 0
+    const minutes: number = timeMap.get(DESIGNATORS.MINUTE) || 0
+    const hours: number = timeMap.get(DESIGNATORS.HOUR) || 0
 
-    const days = dayMap.get(DESIGNATORS.DAY) || 0
-    const weeks = dayMap.get(DESIGNATORS.WEEK) || 0
-    const months = dayMap.get(DESIGNATORS.MONTH) || 0
-    const years = dayMap.get(DESIGNATORS.YEAR) || 0
+    const days: number = dayMap.get(DESIGNATORS.DAY) || 0
+    const weeks: number = dayMap.get(DESIGNATORS.WEEK) || 0
+    const months: number = dayMap.get(DESIGNATORS.MONTH) || 0
+    const years: number = dayMap.get(DESIGNATORS.YEAR) || 0
 
     return new this(years, months, weeks, days, hours, minutes, seconds)
   }

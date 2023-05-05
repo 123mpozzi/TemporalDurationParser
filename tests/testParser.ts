@@ -3,7 +3,7 @@ import { Duration, ERROR_MSG } from '../src/internal'
 
 describe('DateParser', () => {
   it('test throw error on invalid formats', () => {
-    let badCall = function () {
+    let badCall = function (): void {
       Duration.from('PT').to.seconds()
     }
     expect(badCall).to.throw(RangeError, ERROR_MSG.INVALID_FORMAT)
@@ -14,7 +14,7 @@ describe('DateParser', () => {
   })
 
   it('test throw error on months not set to 0', () => {
-    let badCall = function () {
+    let badCall = function (): void {
       Duration.from('P11MT1M1S').to.seconds()
     }
     expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
@@ -30,7 +30,7 @@ describe('DateParser', () => {
   })
 
   it('test minutes vs months (both have designator M)', () => {
-    let badCall = function () {
+    const badCall = function (): void {
       Duration.from('P1M').to.seconds()
     }
     expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
