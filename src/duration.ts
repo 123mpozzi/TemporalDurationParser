@@ -6,8 +6,8 @@ import { TimeConverter } from './internal'
  */
 export enum DESIGNATORS {
   /**
-   * The Period designator signals the start of the Duration representation  
-   * It indicates that the following string represents a 
+   * The Period designator signals the start of the Duration representation
+   * It indicates that the following string represents a
    * duration of time rather than a specific point in time.
    */
   PERIOD = 'P',
@@ -41,11 +41,7 @@ export class Duration {
     DESIGNATORS.DAY
   ]
   /** Keys used to represent a {@link Map} of the TIME component */
-  private static readonly timeMapKeys = [
-    DESIGNATORS.HOUR,
-    DESIGNATORS.MINUTE,
-    DESIGNATORS.SECOND
-  ]
+  private static readonly timeMapKeys = [DESIGNATORS.HOUR, DESIGNATORS.MINUTE, DESIGNATORS.SECOND]
 
   public readonly to: TimeConverter
 
@@ -57,7 +53,7 @@ export class Duration {
   public readonly months: number
   public readonly years: number
 
-  constructor (
+  constructor(
     years: number,
     months: number,
     weeks: number,
@@ -82,16 +78,8 @@ export class Duration {
    * @param obj object to clone from
    * @returns new Instance of {@link Duration} cloned from the given object
    */
-  public static copy (obj: Duration): Duration {
-    return new Duration(
-      obj.years,
-      obj.months,
-      obj.weeks,
-      obj.days,
-      obj.hours,
-      obj.minutes,
-      obj.seconds
-    )
+  public static copy(obj: Duration): Duration {
+    return new Duration(obj.years, obj.months, obj.weeks, obj.days, obj.hours, obj.minutes, obj.seconds)
   }
 
   /**
@@ -100,9 +88,9 @@ export class Duration {
    * @param debug whether to print the internal state of attribute maps on creation
    * @returns new instance of {@link Duration} built from the parsed string
    */
-  public static from (str: string, debug: boolean = false): Duration {
+  public static from(str: string, debug: boolean = false): Duration {
     const [dayMap, timeMap] = DateParser.build(str, [this.dayMapKeys, this.timeMapKeys], debug)
-    return this.fromMaps(dayMap, timeMap);
+    return this.fromMaps(dayMap, timeMap)
   }
 
   /**
@@ -121,6 +109,6 @@ export class Duration {
     const months = dayMap.get(DESIGNATORS.MONTH) || 0
     const years = dayMap.get(DESIGNATORS.YEAR) || 0
 
-    return new this(years, months, weeks, days, hours, minutes, seconds);
+    return new this(years, months, weeks, days, hours, minutes, seconds)
   }
 }

@@ -5,12 +5,10 @@ module.exports = {
     es2021: true
   },
   extends: 'standard-with-typescript',
-  overrides: [
-  ],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
-    project: ["tsconfig.json"]
+    project: ['tsconfig.json']
   },
-  rules: {
-  }
+  rules: {}
 }

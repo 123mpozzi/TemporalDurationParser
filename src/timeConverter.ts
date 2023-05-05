@@ -16,17 +16,16 @@ export enum MULTIPLIER_2SEC {
   /**
    * Please consider that YEARS are not fixed length, here they are represented as 12 \* MONTHS
    */
-  YEARS = 12 * MONTHS,
+  YEARS = 12 * MONTHS
 }
 
 /**
  * Component responsible for handling time conversions in ISO_8601 Duration
  */
 export class TimeConverter {
-
   private readonly duration: Duration
 
-  constructor (duration: Duration) {
+  constructor(duration: Duration) {
     this.duration = duration
   }
 
@@ -38,10 +37,13 @@ export class TimeConverter {
    * @returns total Duration time in seconds
    * @throws on using banned parameters {@link RangeError}
    */
-  public seconds (monthsBanned: boolean = true, monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS, yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS): number {
+  public seconds(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
     // the month value cannot be used for the conversion and shall result in an error if not set to 0
-    if (this.duration.months > 0 && monthsBanned === true)
-      throw new RangeError(ERROR_MSG.BANNED_PARAM)
+    if (this.duration.months > 0 && monthsBanned === true) throw new RangeError(ERROR_MSG.BANNED_PARAM)
 
     return (
       this.duration.seconds +
