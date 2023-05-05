@@ -10,11 +10,11 @@ export enum MULTIPLIER_2SEC {
   DAYS = 24 * HOURS,
   WEEKS = 7 * DAYS,
   /**
-   * Please consider that MONTHS are not fixed length, here they are represented as 30 \* DAYS
+   * Note that MONTHS are not fixed length, here they are represented as 30 \* DAYS
    */
   MONTHS = 30 * DAYS,
   /**
-   * Please consider that YEARS are not fixed length, here they are represented as 12 \* MONTHS
+   * Note that YEARS are not fixed length, here they are represented as 12 \* MONTHS
    */
   YEARS = 12 * MONTHS
 }

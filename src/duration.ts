@@ -1,4 +1,4 @@
-import { DateParser, TimeConverter } from './internal'
+import { build, TimeConverter } from './internal'
 
 /**
  * Designators are characters used to identify properties inside a ISO_8601 Duration representation
@@ -18,14 +18,6 @@ export enum DESIGNATORS {
   HOUR = 'H',
   MINUTE = 'M',
   SECOND = 'S'
-}
-
-/**
- * Error messages for ISO_8601 Duration parsing
- */
-export enum ERROR_MSG {
-  INVALID_FORMAT = 'Invalid format for ISO_8601 Duration',
-  BANNED_PARAM = 'Blacklisted parameter detected'
 }
 
 /**
@@ -89,7 +81,7 @@ export class Duration {
    * @returns new instance of {@link Duration} built from the parsed string
    */
   public static from(str: string, debug: boolean = false): Duration {
-    const [dayMap, timeMap] = DateParser.build(str, [this.dayMapKeys, this.timeMapKeys], debug)
+    const [dayMap, timeMap] = build(str, [this.dayMapKeys, this.timeMapKeys], debug)
     return this.fromMaps(dayMap, timeMap)
   }
 

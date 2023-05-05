@@ -5,11 +5,12 @@
   "main": "example.ts",
   "scripts": {
     "test": "tsc && mocha -r ts-node/register 'tests/**/*.ts'",
-    "build": "npm test && npm run format",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "build": "npm test && npm run format",
     "try": "tsc && npm run format && node ./dist/src/example.js",
     "dev": "tsc --watch",
-    "lint": "eslint --ignore-path .eslintignore --ext .ts ./src ./tests"
+    "lint": "eslint --ignore-path .eslintignore --ext .ts ./src ./tests",
+    "circ": "npx madge --circular --extensions ts ./"
   },
   "author": "Michele Pozzi",
   "license": "MIT",
