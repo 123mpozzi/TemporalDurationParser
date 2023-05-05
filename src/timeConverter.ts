@@ -1,4 +1,4 @@
-import { Duration, ERROR_MSG } from './internal'
+import { type Duration, ERROR_MSG } from './internal'
 
 /**
  * Multipliers used to convert attributes into seconds
