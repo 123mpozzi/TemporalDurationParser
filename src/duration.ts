@@ -49,13 +49,13 @@ export class Duration {
 
   public readonly to: TimeConverter
 
-  public readonly seconds
-  public readonly minutes
-  public readonly hours
-  public readonly days
-  public readonly weeks
-  public readonly months
-  public readonly years
+  public readonly seconds: number
+  public readonly minutes: number
+  public readonly hours: number
+  public readonly days: number
+  public readonly weeks: number
+  public readonly months: number
+  public readonly years: number
 
   constructor (
     years: number,
