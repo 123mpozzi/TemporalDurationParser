@@ -55,4 +55,90 @@ export class TimeConverter {
       this.duration.years * yearsMultiplicator
     )
   }
+
+  /** @see {@link seconds} */
+  public minutes(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.MINUTES / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
+
+  /** @see {@link seconds} */
+  public hours(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.HOURS / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
+
+  /** @see {@link seconds} */
+  public days(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.DAYS / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
+
+  /** @see {@link seconds} */
+  public weeks(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.WEEKS / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
+
+  /** @see {@link years} */
+  public months(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.MONTHS / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
+
+  /**
+   * @see {@link seconds}
+   *
+   * @example
+   * // With custom multipliers:
+   *
+   * const oneMonth: Duration = Duration.from('P1M')
+   * const yearAsDays: number = MULTIPLIER_2SEC.DAYS * 365
+   * const yearAsWeeks: number = MULTIPLIER_2SEC.WEEKS * 52
+   * // result is close (+- 0.01) to: oneMonth.to.days(false) / 365
+   * oneMonth.to.years(false, MULTIPLIER_2SEC.MONTHS, yearAsDays)
+   * // result is close (+- 0.01) to: oneMonth.to.weeks(false) / 52
+   * oneMonth.to.years(false, MULTIPLIER_2SEC.MONTHS, yearAsWeeks)
+   *
+   */
+  public years(
+    monthsBanned: boolean = true,
+    monthsMultiplicator: number = MULTIPLIER_2SEC.MONTHS,
+    yearsMultiplicator: number = MULTIPLIER_2SEC.YEARS
+  ): number {
+    return (
+      this.seconds(monthsBanned, monthsMultiplicator, yearsMultiplicator) /
+      (MULTIPLIER_2SEC.YEARS / MULTIPLIER_2SEC.SECONDS)
+    )
+  }
 }

@@ -22,6 +22,10 @@ describe('DateParser', () => {
       Duration.from('P9MT1M1S').to.seconds()
     }
     expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
+    const goodCall = function (): void {
+      Duration.from('P9MT1M1S').to.seconds(false) // bannedMonth flag set to false
+    }
+    expect(goodCall).not.to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
   })
 
   it('test normal strings', () => {
