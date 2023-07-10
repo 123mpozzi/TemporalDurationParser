@@ -13,31 +13,13 @@ describe('DateParser', () => {
     expect(badCall).to.throw(RangeError, ERROR_MSG.INVALID_FORMAT)
   })
 
-  it('test throw error on months not set to 0', () => {
-    let badCall = function (): void {
-      Duration.from('P11MT1M1S').to.seconds()
-    }
-    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
-    badCall = function () {
-      Duration.from('P9MT1M1S').to.seconds()
-    }
-    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
-    const goodCall = function (): void {
-      Duration.from('P9MT1M1S').to.seconds(false) // bannedMonth flag set to false
-    }
-    expect(goodCall).not.to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
-  })
-
   it('test normal strings', () => {
     expect(Duration.from('PT1M1.2S').to.seconds()).to.equal(61.2)
     expect(Duration.from('PT1M1S').to.seconds()).to.equal(61)
   })
 
   it('test minutes vs months (both have designator M)', () => {
-    const badCall = function (): void {
-      Duration.from('P1M').to.seconds()
-    }
-    expect(badCall).to.throw(RangeError, ERROR_MSG.BANNED_PARAM)
+    expect(Duration.from('P1M').to.months()).to.equal(1)
     expect(Duration.from('PT1M').to.seconds()).to.equal(60)
   })
 

@@ -27,8 +27,7 @@ import { DESIGNATORS } from './internal'
  * Error messages for ISO_8601 Duration parsing
  */
 export enum ERROR_MSG {
-  INVALID_FORMAT = 'Invalid format for ISO_8601 Duration',
-  BANNED_PARAM = 'Blacklisted parameter detected'
+  INVALID_FORMAT = 'Invalid format for ISO_8601 Duration'
 }
 
 /**

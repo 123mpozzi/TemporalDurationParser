@@ -40,15 +40,15 @@ import { MULTIPLIER_2SEC } from "./internal";
 
 const yearAsDays: number = MULTIPLIER_2SEC.DAYS * 365;
 const oneYear: Duration = Duration.from('P1Y');
-oneYear.to.seconds(false, MULTIPLIER_2SEC.MONTHS, yearAsDays)  // 31536000
+oneYear.to.seconds(MULTIPLIER_2SEC.MONTHS, yearAsDays)  // 31536000
 
 
 const oneMonth: Duration = Duration.from('P1M')
 const yearAsWeeks: number = MULTIPLIER_2SEC.WEEKS * 52
 // result is close (+- 0.01) to: oneMonth.to.days(false) / 365
-oneMonth.to.years(false, MULTIPLIER_2SEC.MONTHS, yearAsDays)
+oneMonth.to.years(MULTIPLIER_2SEC.MONTHS, yearAsDays)
 // result is close (+- 0.01) to: oneMonth.to.weeks(false) / 52
-oneMonth.to.years(false, MULTIPLIER_2SEC.MONTHS, yearAsWeeks)
+oneMonth.to.years(MULTIPLIER_2SEC.MONTHS, yearAsWeeks)
 
 ```
 
@@ -100,6 +100,4 @@ responsible for handling time conversions
 
 
 - I did implement these **two formats**: `P[n]Y[n]M[n]DT[n]H[n]M[n]S` and `P[n]W`, but I didn't implement this last format: `P0003-06-04T12:30:05`
-- Note that when calculating total seconds, there are attributes which are **not fixed length**: *months* and *years*.  By default a month is considered 30 days and a year 12 months, but can be customized.
-- By design, the month parameter is 'banned' and throws an error if it is not set to 0, can disable this behaviour by setting the first argument as `false` when converting time: `Duration.from('P1M').to.seconds(false)` 
-
+- Note that when calculating total seconds, there are attributes which are **not fixed length**: *months* and *years*.  By default a month is considered `30.437` days and a year `12` months, but can be customized.

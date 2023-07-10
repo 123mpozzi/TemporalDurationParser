@@ -17,14 +17,8 @@ console.log(Duration.from('PT0.0021S', debug).to.seconds())
 console.log(Duration.from('P0D', debug).to.seconds())
 console.log(Duration.from('P0.2W', debug).to.seconds())
 console.log(Duration.from('P6W', debug).to.seconds())
-
-try {
-  // These throw the custom error for "banned parameter"
-  console.log(Duration.from('PT1M1.2S', debug).to.seconds())
-  console.log(Duration.from('P01M1.2S', debug).to.seconds())
-} catch (e) {
-  console.log(e)
-}
+console.log(Duration.from('PT1M1.2S', debug).to.seconds())
+console.log(Duration.from('P01M1.2S', debug).to.seconds())
 
 try {
   // These throw the custom error for "invalid format"
