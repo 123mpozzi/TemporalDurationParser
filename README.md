@@ -1,10 +1,15 @@
 [Temporal.Duration]: https://tc39.es/proposal-temporal/docs/duration.html
 
+
 # Temporal.Duration Parser
 
-ISO 8601 notation for [Temporal.Duration]  
+Parser of ISO 8601 notation for durations
 
-The parser is not complete and is mainly focused on converting Duration strings into seconds.
+There is a good description of it on TC39's [Temporal.Duration] Proposal page: 
+> Briefly, the ISO 8601 notation consists of a `P` character, followed by years, months, weeks, and days, followed by a `T` character, followed by hours, minutes, and seconds with a decimal part, each with a single-letter suffix that indicates the unit. Any zero components may be omitted.
+
+*The parser is not complete and is mainly focused on converting Duration strings into seconds*
+
 
 ## Setup
 
@@ -12,6 +17,7 @@ Install dependencies
 ```bash
 npm install
 ```
+
 
 ## Usage
 
@@ -45,12 +51,13 @@ oneYear.to.seconds(MULTIPLIER_2SEC.MONTHS, yearAsDays)  // 31536000
 
 const oneMonth: Duration = Duration.from('P1M')
 const yearAsWeeks: number = MULTIPLIER_2SEC.WEEKS * 52
-// result is close (+- 0.01) to: oneMonth.to.days(false) / 365
+// result is close (+- 0.01) to: oneMonth.to.days() / 365
 oneMonth.to.years(MULTIPLIER_2SEC.MONTHS, yearAsDays)
-// result is close (+- 0.01) to: oneMonth.to.weeks(false) / 52
+// result is close (+- 0.01) to: oneMonth.to.weeks() / 52
 oneMonth.to.years(MULTIPLIER_2SEC.MONTHS, yearAsWeeks)
 
 ```
+
 
 ## Testing
 
@@ -63,6 +70,7 @@ Run tests via Mocha
 ```bash
 npm test
 ```
+
 
 ## Project Structure
 
@@ -97,7 +105,6 @@ responsible for handling time conversions
 
 
 ## Limitations
-
 
 - I did implement these **two formats**: `P[n]Y[n]M[n]DT[n]H[n]M[n]S` and `P[n]W`, but I didn't implement this last format: `P0003-06-04T12:30:05`
 - Note that when calculating total seconds, there are attributes which are **not fixed length**: *months* and *years*.  By default a month is considered `30.437` days and a year `12` months, but can be customized.
