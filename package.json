@@ -1,8 +1,8 @@
 {
-  "name": "0205-chall",
+  "name": "durations-parser",
   "version": "1.0.0",
-  "description": "",
-  "main": "example.ts",
+  "description": "Parser of ISO 8601 notation for durations",
+  "main": "dist/durations.compiled.js",
   "scripts": {
     "test": "tsc && mocha -r ts-node/register 'tests/**/*.ts'",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
@@ -14,6 +14,24 @@
   },
   "author": "Michele Pozzi",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/123mpozzi/TemporalDurationParser.git"
+  },
+  "keywords": [
+    "iso 8601",
+    "iso_8601",
+    "8601",
+    "Temporal",
+    "Duration",
+    "Temporal.Duration",
+    "Period",
+    "Parser",
+    "Date"
+  ],
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
